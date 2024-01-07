@@ -15,37 +15,38 @@ function validateCount(value) {
 }
 
 class Triangle {
-   constructor(a, b, c) {
-      if (a + b <= c || a + c <= b || b + c <= a) {
-         throw new Error('Треугольник с такими сторонами не существует');
+   constructor(side1, side2, side3) {
+      if (!this.isValidTriangle(side1, side2, side3)) {
+         throw new Error("Треугольник с такими сторонами не существует");
       }
-
-      this._perimeter = a + b + c;
-      this._area = this.calculateArea(a, b, c);
+      this.side1 = side1;
+      this.side2 = side2;
+      this.side3 = side3;
    }
 
-   calculateArea(a, b, c) {
-      let s = this._perimeter / 2;
-      let triangleArea = Math.sqrt(s * (s - a) * (s - b) * (s - c));
-      return +triangleArea.toFixed(0);
+   isValidTriangle(a, b, c) {
+      return a + b > c && b + c > a && c + a > b;
    }
 
-   getPerimeter() {
-      return this._perimeter;
+   get perimeter() {
+      return this.side1 + this.side2 + this.side3;
    }
 
-   getArea() {
-      return this._area;
+   get area() {
+      const s = this.perimeter / 2;
+      const area = Math.sqrt(s * (s - this.side1) * (s - this.side2) * (s - this.side3));
+      return parseFloat(area.toFixed(3));
    }
 }
 
-function getTriangle(a, b, c) {
+function getTriangle(side1, side2, side3) {
    try {
-      return new Triangle(a, b, c);
+      const triangle = new Triangle(side1, side2, side3);
+      return triangle;
    } catch (error) {
       return {
-         getPerimeter: () => 'Ошибка! Треугольник не существует',
-         getArea: () => 'Ошибка! Треугольник не существует'
+         perimeter: () => 'Ошибка! Треугольник не существует',
+         area: () => 'Ошибка! Треугольник не существует',
       };
    }
 }
